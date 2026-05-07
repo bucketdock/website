@@ -74,7 +74,17 @@ a:hover {
 
 img {
   max-width: 100%;
+  height: auto;
   display: block;
+}
+
+/* Ensure images in panels/cards don't overflow */
+.panel img,
+.shot-frame img,
+.card img {
+  width: 100%;
+  object-fit: contain;
+  border-radius: 8px;
 }
 
 .container {
@@ -122,6 +132,7 @@ img {
 .nav-links a {
   color: var(--text-dim);
   transition: color 0.15s ease;
+  padding: 8px 4px;
 }
 .nav-links a:hover {
   color: var(--text);
@@ -131,19 +142,23 @@ img {
 .nav-menu-btn {
   display: none;
   align-items: center;
-  gap: 7px;
-  padding: 7px 13px;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
   border-radius: 10px;
-  border: 1px solid var(--border-strong);
-  background: var(--bg-card);
+  border: none;
+  background: transparent;
   color: var(--text);
-  font: inherit;
-  font-size: 14px;
   cursor: pointer;
-  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+.nav-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.06);
 }
 .nav-menu-btn svg {
-  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
 }
 .nav-menu-btn:focus-visible {
   outline: 2px solid rgba(91, 168, 255, 0.55);
@@ -151,7 +166,6 @@ img {
 }
 /* Full-screen overlay menu */
 .nav-overlay {
-  display: none;
   position: fixed;
   inset: 0;
   z-index: 200;
@@ -160,9 +174,64 @@ img {
   -webkit-backdrop-filter: blur(16px);
   flex-direction: column;
   padding: 24px;
+  display: flex;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.25s ease,
+    visibility 0.25s ease,
+    pointer-events 0s linear 0.25s;
 }
 .nav-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.25s ease, visibility 0s, pointer-events 0s;
+}
+.nav-overlay-links {
   display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 40px;
+}
+.nav-overlay-links a {
+  display: block;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.2s ease,
+    transform 0.25s ease,
+    color 0.15s ease;
+}
+.nav-overlay.is-open .nav-overlay-links a {
+  opacity: 1;
+  transform: translateY(0);
+}
+.nav-overlay.is-open .nav-overlay-links a:nth-child(1) {
+  transition-delay: 0.08s;
+}
+.nav-overlay.is-open .nav-overlay-links a:nth-child(2) {
+  transition-delay: 0.12s;
+}
+.nav-overlay.is-open .nav-overlay-links a:nth-child(3) {
+  transition-delay: 0.16s;
+}
+.nav-overlay.is-open .nav-overlay-links a:nth-child(4) {
+  transition-delay: 0.20s;
+}
+.nav-overlay-links a:last-child {
+  border-bottom: none;
+}
+.nav-overlay-links a.is-current {
+  color: var(--brand-blue);
 }
 .nav-overlay-close {
   align-self: flex-end;
@@ -216,9 +285,13 @@ img {
     background 0.2s ease;
   text-decoration: none;
   color: var(--text);
+  min-height: 44px;
 }
 .btn:hover {
   transform: translateY(-1px);
+}
+.btn:active {
+  transform: translateY(0);
 }
 .btn-primary {
   background: var(--brand-blue);
@@ -253,6 +326,7 @@ img {
   padding: 100px 0 80px;
   text-align: center;
   position: relative;
+  overflow: hidden;
 }
 .hero-eyebrow {
   display: inline-block;
@@ -649,29 +723,32 @@ footer {
 .prose {
   max-width: 760px;
   margin: 0 auto;
+  padding: 0 24px;
 }
 .prose h1 {
   font-size: 38px;
   letter-spacing: -0.02em;
   margin-top: 0;
+  line-height: 1.15;
 }
 .prose h2 {
   font-size: 24px;
   letter-spacing: -0.01em;
-  margin-top: 48px;
-  padding-bottom: 6px;
+  margin-top: 56px;
+  padding-bottom: 8px;
   border-bottom: 1px solid var(--border);
 }
 .prose h3 {
   font-size: 18px;
-  margin-top: 28px;
+  margin-top: 32px;
 }
 .prose code {
-  background: rgba(255, 255, 255, 0.06);
-  padding: 2px 6px;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 7px;
   border-radius: 5px;
   font-size: 13px;
   font-family: "SF Mono", Menlo, Consolas, monospace;
+  word-break: break-word;
 }
 .prose pre {
   background: var(--bg-card);
@@ -680,18 +757,23 @@ footer {
   padding: 16px 18px;
   overflow-x: auto;
   font-size: 13px;
+  margin: 0 0 18px;
+  -webkit-overflow-scrolling: touch;
 }
 .prose pre code {
   background: transparent;
   padding: 0;
   font-size: 13px;
+  word-break: break-word;
 }
 .prose ul {
   padding-left: 22px;
+  margin: 0 0 16px;
 }
 .prose li {
-  margin: 4px 0;
+  margin: 6px 0;
   color: var(--text-dim);
+  line-height: 1.6;
 }
 .prose li strong,
 .prose p strong {
@@ -699,6 +781,18 @@ footer {
 }
 .prose p {
   color: var(--text-dim);
+  margin: 0 0 16px;
+  line-height: 1.65;
+}
+.prose a {
+  color: var(--brand-blue);
+  text-decoration: underline;
+  text-decoration-color: rgba(91, 168, 255, 0.3);
+  text-underline-offset: 2px;
+}
+.prose a:hover {
+  color: #79bcff;
+  text-decoration-color: rgba(91, 168, 255, 0.6);
 }
 
 /* Sticky nav covers anchor targets — push them down by the nav height */
@@ -717,12 +811,23 @@ footer {
   }
   .shot-card {
     flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
     padding: 22px;
     gap: 20px;
   }
-  .shot-card > .shot-frame,
+  .shot-card > .shot-frame {
+    flex: 0 0 100%;
+    width: 100%;
+    max-width: 100%;
+  }
+  .shot-card > .shot-frame img {
+    width: 100%;
+    height: auto;
+  }
   .shot-card > div:not(.shot-frame) {
     flex: 1 1 100%;
+    min-width: 0;
   }
   .shot-grid {
     gap: 36px;
@@ -733,11 +838,17 @@ footer {
   .mock-side {
     display: none;
   }
+  .install-panel {
+    gap: 28px;
+  }
   .install-panel pre,
   .shot-card pre,
   .prose pre {
     font-size: 12px;
     padding: 14px 14px;
+  }
+  .install-copy h2 {
+    font-size: 28px;
   }
   section {
     padding: 64px 0;
@@ -748,11 +859,11 @@ footer {
   .nav-inner {
     padding: 12px 0;
   }
-  /* Keep the nav links visible — just compact them so the design still
-     reads as a navbar instead of vanishing entirely on phones. */
   .nav-links {
-    gap: 14px;
-    font-size: 13px;
+    display: none;
+  }
+  .nav-menu-btn {
+    display: inline-flex;
   }
   .brand {
     font-size: 15px;
@@ -762,10 +873,15 @@ footer {
     height: 24px;
   }
   .hero {
-    padding: 56px 0 36px;
+    padding: 64px 0 48px;
+  }
+  .hero h1 {
+    font-size: clamp(28px, 7vw, 40px);
   }
   .hero p {
-    font-size: 15px;
+    font-size: 16px;
+    max-width: 100%;
+    padding: 0 4px;
   }
   .hero-actions {
     display: flex;
@@ -776,21 +892,45 @@ footer {
   .hero-actions .btn {
     width: 100%;
   }
+  .hero-meta {
+    font-size: 11px;
+    padding: 0 8px;
+  }
   section {
-    padding: 48px 0;
+    padding: 56px 0;
   }
   .section-title {
     margin-bottom: 36px;
   }
   .panel {
-    padding: 22px;
+    padding: 20px;
     border-radius: 16px;
   }
   .grid {
+    grid-template-columns: 1fr;
     gap: 12px;
   }
   .card {
-    padding: 20px;
+    padding: 18px;
+  }
+  .card h3 {
+    font-size: 15px;
+  }
+  .card p {
+    font-size: 13px;
+  }
+  .card .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .install-panel {
+    gap: 24px;
+  }
+  .install-copy h2 {
+    font-size: 26px;
+  }
+  .install-steps {
+    font-size: 14px;
   }
   .notice-banner {
     margin-bottom: 36px;
@@ -809,28 +949,205 @@ footer {
   }
   .footer-links a {
     margin-left: 0;
+    padding: 8px 4px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .prose {
+    padding: 0 8px;
   }
   .prose h1 {
     font-size: 28px;
+    line-height: 1.2;
   }
   .prose h2 {
     font-size: 20px;
-    margin-top: 36px;
+    margin-top: 44px;
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+  }
+  .prose h3 {
+    font-size: 17px;
+    margin-top: 28px;
+  }
+  .prose p,
+  .prose li {
+    font-size: 15px;
+    line-height: 1.65;
+  }
+  .prose p {
+    margin-bottom: 16px;
+  }
+  .prose pre {
+    font-size: 12px;
+    padding: 14px 16px;
+    margin: 0 0 16px;
+  }
+  .prose ul {
+    padding-left: 20px;
+    margin-bottom: 16px;
+  }
+  .prose li {
+    margin-bottom: 8px;
+  }
+  .prose code {
+    font-size: 12px;
+    padding: 2px 5px;
+  }
+  .prose a {
+    color: var(--brand-blue);
+  }
+  .shot-card {
+    padding: 16px;
+    gap: 16px;
+  }
+  .shot-card h3 {
+    font-size: 16px;
+  }
+  .shot-card p {
+    margin-bottom: 12px;
+  }
+  .install-panel pre {
+    font-size: 12px;
+    padding: 12px 14px;
+  }
+  .install-steps {
+    font-size: 14px;
+  }
+  .install-copy h2 {
+    font-size: 24px;
+  }
+  /* Ensure shot-frame images scale properly */
+  .shot-frame {
+    width: 100%;
+    padding: 8px;
+  }
+  .shot-frame img {
+    width: 100%;
+    height: auto;
   }
 }
 
 @media (max-width: 460px) {
-  .nav-links {
-    display: none;
-  }
-  .nav-menu-btn {
-    display: inline-flex;
+  .hero {
+    padding: 48px 0 36px;
   }
   .hero h1 {
-    font-size: 30px;
-    line-height: 1.1;
+    font-size: 26px;
+    line-height: 1.15;
+  }
+  .hero p {
+    font-size: 14px;
+  }
+  .hero-actions {
+    gap: 10px;
+  }
+  .btn {
+    padding: 11px 16px;
+    font-size: 14px;
+  }
+  section {
+    padding: 40px 0;
+  }
+  .section-title h2 {
+    font-size: 24px;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .card {
+    padding: 16px;
+  }
+  .card .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .install-panel {
+    gap: 18px;
+  }
+  .install-copy h2 {
+    font-size: 22px;
+  }
+  .install-steps {
+    font-size: 13px;
+  }
+  .cta {
+    padding: 48px 0;
+  }
+  .cta h2 {
+    font-size: 24px;
+  }
+  .cta p {
+    font-size: 14px;
+  }
+  footer {
+    padding: 32px 0 40px;
   }
   .container {
     padding: 0 16px;
+  }
+  .prose {
+    padding: 0 6px;
+  }
+  .prose h1 {
+    font-size: 24px;
+    line-height: 1.2;
+  }
+  .prose h2 {
+    font-size: 18px;
+    margin-top: 40px;
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+  }
+  .prose h3 {
+    font-size: 16px;
+    margin-top: 28px;
+  }
+  .prose p {
+    font-size: 15px;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
+  .prose pre {
+    font-size: 11px;
+    padding: 14px 16px;
+    margin: 0 0 16px;
+  }
+  .prose ul {
+    padding-left: 20px;
+    margin-bottom: 16px;
+  }
+  .prose li {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+  .prose code {
+    font-size: 11px;
+    padding: 2px 5px;
+  }
+  .prose a {
+    color: var(--brand-blue);
+  }
+  .shot-card {
+    padding: 12px;
+    gap: 12px;
+  }
+  .shot-card h3 {
+    font-size: 15px;
+  }
+  .card {
+    padding: 14px;
+  }
+  .card h3 {
+    font-size: 14px;
+  }
+  .card p {
+    font-size: 13px;
+  }
+  .card .btn {
+    width: 100%;
+    justify-content: center;
   }
 }
