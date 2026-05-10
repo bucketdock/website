@@ -163,6 +163,21 @@ Buckets:  optional list</code></pre>
           <h2 id="browse">Browse, filter and preview</h2>
           <ul>
             <li>
+              The top toolbar carries
+              <strong>back / forward</strong> buttons (or <code>⌘[</code> /
+              <code>⌘]</code>) plus the current folder name. The full clickable
+              <strong>path bar</strong> sits at the bottom of the window — click
+              any segment to jump straight there. The toolbar never wraps onto a
+              second row: when the window narrows, lower-priority actions
+              collapse into a <strong>“…” overflow menu</strong> on the right.
+            </li>
+            <li>
+              Folder rows have a small ">"
+              <strong>disclosure triangle</strong>. Click it to expand the
+              folder inline and see its contents indented under the row, without
+              navigating into it. Click again to collapse.
+            </li>
+            <li>
               The toolbar has an inline <strong>filter</strong> box that narrows
               the current listing by case-insensitive substring.
             </li>
@@ -183,7 +198,7 @@ Buckets:  optional list</code></pre>
               <code>—</code> for folders).
             </li>
             <li>
-              Selecting a connection without a bucket shows a Finder-style
+              Selecting a connection without a bucket shows a
               <strong>bucket grid</strong> in the right pane.
             </li>
             <li>
@@ -232,18 +247,31 @@ Buckets:  optional list</code></pre>
             >.
           </p>
 
-          <h2 id="copy">Copy between buckets</h2>
+          <h2 id="copy">Copy and move between buckets</h2>
           <p>
             Right-click one or more files <em>or folders</em> and choose
-            <strong>Copy to…</strong>. Pick a destination connection (it can be
-            a different provider), a bucket and an optional prefix. You can also
-            click <strong>Browse…</strong> and drill into the destination tree —
-            clicking a folder sets it as the destination in the same click, so
-            once you can see the folder you want, just hit
-            <strong>Copy</strong>. Each file becomes a tracked copy transfer
-            that streams through the desktop and reports progress as it goes.
-            Folders are expanded recursively and every object below the prefix
-            is queued.
+            <strong>Copy to…</strong> or <strong>Move to…</strong>. Pick a
+            destination connection (it can be a different provider) and a
+            bucket. The destination is then chosen from a
+            <strong>folder tree</strong>: click a row’s disclosure triangle to
+            expand its children inline, click the row body to select it as the
+            destination. The <strong>New Folder</strong> button creates a
+            sub-folder under the current selection so you can carve out a fresh
+            destination without leaving the dialog — the new folder is then
+            auto-selected so the next click queues the transfer.
+          </p>
+          <p>
+            Each file becomes a tracked transfer that streams through the
+            desktop and reports progress as it goes. Folders are expanded
+            recursively and every object below the prefix is queued.
+          </p>
+          <p>
+            <strong>Move</strong> is implemented as copy-then-delete-source, but
+            each individual source object is removed only after its own copy
+            completes successfully. Folders are tracked as a group: the source
+            prefix is wiped only when every file in the subtree copied cleanly.
+            A partial, cancelled or failed copy leaves the original untouched so
+            you can safely retry.
           </p>
 
           <h2 id="window">Window behaviour on macOS</h2>
