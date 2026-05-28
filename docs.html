@@ -6,7 +6,7 @@
     <title>Docs · BucketDock</title>
     <meta
       name="description"
-      content="Connect AWS S3, Cloudflare R2 or any S3-compatible endpoint to BucketDock — and learn the keyboard shortcuts and transfer queue."
+      content="Connect AWS S3, Cloudflare R2, Hetzner Object Storage or any S3-compatible endpoint to BucketDock — and learn the keyboard shortcuts and transfer queue."
     />
     <link rel="icon" type="image/svg+xml" href="assets/logo.svg" />
     <link
@@ -139,6 +139,12 @@ Buckets:  your-bucket-name</code></pre>
             separated.
           </p>
 
+          <h3>Hetzner Object Storage</h3>
+          <pre><code>Provider: Hetzner Object Storage
+Endpoint: https://fsn1.your-objectstorage.com
+Region:   (hidden in the app)
+Buckets:  optional list</code></pre>
+
           <h3>S3-compatible (MinIO, Backblaze B2, etc.)</h3>
           <pre><code>Provider: Custom (S3-compatible)
 Endpoint: https://your-endpoint.example.com
@@ -147,10 +153,10 @@ Buckets:  optional list</code></pre>
 
           <h2 id="transfers">Transfer queue</h2>
           <p>
-            Every upload, download and bucket-to-bucket copy is tracked in the
-            dock at the bottom-right of the window. Each row shows live progress
-            (multipart uploads emit per-part progress) and a status indicator.
-            You can:
+            Every upload, download, bucket-to-bucket copy and bulk delete is
+            tracked in the dock at the bottom-right of the window. Each row
+            shows live progress (multipart uploads emit per-part progress, and
+            deletes count objects processed) and a status indicator. You can:
           </p>
           <ul>
             <li><strong>Cancel</strong> a running transfer</li>
@@ -187,6 +193,11 @@ Buckets:  optional list</code></pre>
               direction.
             </li>
             <li>
+              The <strong>Name</strong> column is <strong>resizable</strong>, so
+              long filenames and folder names stay clipped instead of forcing
+              the table wider than needed.
+            </li>
+            <li>
               The Type column shows the
               <strong>real <code>Content-Type</code></strong> the server
               returns. <code>list_objects_v2</code> doesn’t include it, so
@@ -214,6 +225,11 @@ Buckets:  optional list</code></pre>
               Pick <strong>Get Info</strong> to inspect headers and user
               metadata read-only, or <strong>Edit Headers…</strong> to change
               Content-Type, Cache-Control, custom user metadata and more.
+            </li>
+            <li>
+              Folder rows also offer <strong>Calculate Folder Size</strong> in
+              the context menu. BucketDock walks all nested subfolders and shows
+              the total size of every object under that prefix.
             </li>
             <li>
               Renaming a folder or copying a folder between buckets is
